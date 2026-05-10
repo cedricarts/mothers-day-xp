@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#0f0a14" />
+  <title>A Gift for Mom</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ─── AMBIENT CANVAS ─────────────────────────────────────── -->
+  <canvas id="ambient-canvas" aria-hidden="true"></canvas>
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+  <!-- ─── PARTICLES ─────────────────────────────────────────── -->
+  <div id="particles" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SCREEN 1 — COMPOSER
+  ════════════════════════════════════════════════════════════ -->
+  <main id="screen-composer" class="screen active" role="main">
+    <div class="composer-wrap">
+
+      <header class="composer-header">
+        <div class="logo-mark" aria-label="A Gift for Mom">✦</div>
+        <h1 class="headline">A Gift for Mom</h1>
+        <p class="subline">Craft something she'll remember forever.</p>
+      </header>
+
+      <div class="glass-card composer-card">
+
+        <!-- Theme selector -->
+        <div class="field-group">
+          <label class="field-label">Choose a feeling</label>
+          <div class="theme-pills" role="radiogroup" aria-label="Theme">
+            <button class="theme-pill active" data-theme="rose"    aria-pressed="true"  aria-label="Rose">🌸 Rose</button>
+            <button class="theme-pill"         data-theme="gold"   aria-pressed="false" aria-label="Gold">✨ Gold</button>
+            <button class="theme-pill"         data-theme="sage"   aria-pressed="false" aria-label="Sage">🌿 Sage</button>
+            <button class="theme-pill"         data-theme="sky"    aria-pressed="false" aria-label="Sky">🌙 Sky</button>
+            <button class="theme-pill"         data-theme="violet" aria-pressed="false" aria-label="Violet">💜 Violet</button>
+          </div>
+        </div>
+
+        <!-- Recipient -->
+        <div class="field-group">
+          <label class="field-label" for="recipient-name">To</label>
+          <div class="input-wrap">
+            <input
+              id="recipient-name"
+              class="glass-input"
+              type="text"
+              placeholder="e.g. Mom, Mama, Mum…"
+              maxlength="40"
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </div>
+        </div>
+
+        <!-- Sender -->
+        <div class="field-group">
+          <label class="field-label" for="sender-name">From</label>
+          <div class="input-wrap">
+            <input
+              id="sender-name"
+              class="glass-input"
+              type="text"
+              placeholder="Your name"
+              maxlength="40"
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </div>
+        </div>
+
+        <!-- Message -->
+        <div class="field-group">
+          <label class="field-label" for="message-body">Your message</label>
+          <div class="input-wrap textarea-wrap">
+            <textarea
+              id="message-body"
+              class="glass-input"
+              rows="5"
+              placeholder="Write what's in your heart…"
+              maxlength="800"
+              spellcheck="true"
+            ></textarea>
+            <div class="char-count" aria-live="polite"><span id="char-remaining">800</span> left</div>
+          </div>
+        </div>
+
+        <!-- Error -->
+        <div id="composer-error" class="error-msg" role="alert" aria-live="assertive" hidden></div>
+
+        <!-- CTA -->
+        <button id="btn-generate" class="cta-btn" aria-label="Generate surprise link">
+          <span class="btn-text">Generate Surprise Link</span>
+          <span class="btn-icon" aria-hidden="true">→</span>
+        </button>
+
+      </div>
+
+      <!-- Link output -->
+      <div id="link-output" class="link-output" hidden aria-live="polite">
+        <div class="glass-card link-card">
+          <p class="link-label">Your surprise link is ready ✦</p>
+          <div class="link-row">
+            <input id="generated-link" class="link-display" readonly aria-label="Generated link" />
+            <button id="btn-copy" class="copy-btn" aria-label="Copy link">
+              <span class="copy-icon">⎘</span>
+            </button>
+          </div>
+          <div id="copy-success" class="copy-success" hidden aria-live="polite">Copied to clipboard ✓</div>
+          <p class="link-hint">Send this link to your mom. She'll experience it as a cinematic surprise.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SCREEN 2 — REVEAL EXPERIENCE
+  ════════════════════════════════════════════════════════════ -->
+  <main id="screen-reveal" class="screen" role="main" aria-label="Surprise message">
+
+    <!-- Cinematic intro overlay -->
+    <div id="intro-overlay" class="intro-overlay" aria-hidden="true">
+      <div class="intro-inner">
+        <div class="intro-petal" aria-hidden="true">✦</div>
+        <p class="intro-text">Something beautiful<br>is waiting for you…</p>
+      </div>
+    </div>
+
+    <!-- Main reveal content -->
+    <div id="reveal-content" class="reveal-content" aria-live="polite">
+
+      <div class="reveal-top">
+        <div class="reveal-petal petal-1" aria-hidden="true">✿</div>
+        <div class="reveal-petal petal-2" aria-hidden="true">✾</div>
+        <div class="reveal-petal petal-3" aria-hidden="true">✦</div>
+      </div>
+
+      <div class="glass-card reveal-card">
+
+        <div class="reveal-to" id="reveal-to">
+          <span class="reveal-label">For</span>
+          <span class="reveal-name" id="display-recipient">Mom</span>
+        </div>
+
+        <div class="reveal-gate" id="reveal-gate">
+          <button id="btn-reveal" class="reveal-btn" aria-label="Tap to reveal your message">
+            <span class="reveal-btn-ripple" aria-hidden="true"></span>
+            <span class="reveal-btn-text">Tap to Reveal</span>
+          </button>
+          <p class="reveal-gate-hint">A gift is waiting inside</p>
+        </div>
+
+        <div id="message-display" class="message-display" hidden>
+          <div class="message-occasion">Happy Mother's Day</div>
+          <blockquote class="message-text" id="display-message"></blockquote>
+          <div class="message-from">
+            <span class="from-label">with love,</span>
+            <span class="from-name" id="display-sender"></span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="reveal-bottom">
+        <div class="reveal-petal petal-4" aria-hidden="true">✿</div>
+        <div class="reveal-petal petal-5" aria-hidden="true">✾</div>
+      </div>
+
+    </div>
+
+    <!-- Missing message fallback -->
+    <div id="reveal-fallback" class="reveal-fallback" hidden role="alert">
+      <div class="glass-card fallback-card">
+        <div class="fallback-icon" aria-hidden="true">✦</div>
+        <h2 class="fallback-title">This gift has expired</h2>
+        <p class="fallback-body">The link you followed is no longer valid. Ask your sender to create a new one.</p>
+        <a href="index.html" class="cta-btn fallback-cta">Create a new gift</a>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
