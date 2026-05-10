@@ -44,8 +44,48 @@ let confettiRunning = false;
 let confettiId = null;
 
 /* ═══════════════════════════════════════════════════════════
-   ROUTING — hash-based, GitHub Pages safe
+   MESSAGE TEMPLATES
 ══════════════════════════════════════════════════════════ */
+const TEMPLATES = {
+  poetic: `You were my first home — the warmth I knew before I knew anything else. Every good thing in me learned its shape from watching you. I don't always find the words, but today I want you to know: the way you love is the most beautiful thing I've ever witnessed. Thank you for being the kind of woman who makes the world feel safer just by being in it. Happy Mother's Day, Mom. I love you more than I'll ever say out loud.`,
+
+  warm: `Mom, I've been trying to put into words what you mean to me, and I keep falling short. You've given me so much more than a home — you gave me a sense of who I am. Thank you for every sacrifice I saw, and every one I didn't. Today is yours. I hope it feels even half as special as you've always made me feel. I love you deeply.`,
+
+  funny: `Mom, you always said I'd understand when I was older. Well, I'm older now — and honestly? I still don't know how you did it. You raised me, survived me, and somehow came out still loving me. That's not parenting, that's a superpower. Happy Mother's Day to the woman who deserves a medal, a vacation, and probably a very long nap. Love you to the moon and back. 🌸`,
+
+  short: `Mom — thank you. For everything seen and unseen. For the times you stayed up worried, the times you cheered loudest, and the times you just knew. I don't say it enough: I am so grateful you're my mom. Happy Mother's Day. I love you.`,
+
+  gratitude: `There's a version of my life without your sacrifices, and I never want to visit it. You gave up things I'll never fully know so that I could have everything I needed. That kind of love doesn't ask for anything back — and that's exactly why I want to give you everything. Thank you, Mom. From the bottom of my heart. Happy Mother's Day.`,
+};
+
+function initTemplates() {
+  const chips = document.querySelectorAll(".template-chip");
+  chips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const key = chip.dataset.tpl;
+      const text = TEMPLATES[key];
+      if (!text) return;
+
+      messageInput.value = text;
+      charRemaining.textContent = 800 - text.length;
+
+      // Visual feedback
+      chips.forEach((c) => c.classList.remove("used"));
+      chip.classList.add("used");
+
+      // Reset generate button state
+      btnGenerate.disabled = false;
+      btnGenerate.querySelector(".btn-text").textContent =
+        "Generate Surprise Link";
+      linkOutput.hidden = true;
+      clearError();
+
+      messageInput.focus();
+      messageInput.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+  });
+}
+
 function route() {
   const hash = location.hash; // e.g. "#reveal?id=abc123"
   if (hash.startsWith("#reveal")) {
@@ -503,6 +543,7 @@ window.addEventListener("hashchange", route);
 
 (function init() {
   initAmbient();
+  initTemplates();
   spawnParticles();
   route();
 })();
